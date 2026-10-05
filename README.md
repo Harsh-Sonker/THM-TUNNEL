@@ -1,51 +1,60 @@
-# THM-TUNNEL
+<div align="center">
+  <img src="https://tryhackme-images.s3.amazonaws.com/user-avatars/b300f5fc0fa25e60d5b5125dd2806282.png" alt="TryHackMe" width="100"/>
+  <h1>🛡️ THM-TUNNEL</h1>
+  <p><strong>The Ultimate TryHackMe VPN Configuration Manager</strong></p>
 
-### TryHackMe VPN Configuration Manager
+  <p>
+    <a href="https://github.com/Harsh-Sonker/THM-TUNNEL/issues"><img src="https://img.shields.io/github/issues/Harsh-Sonker/THM-TUNNEL" alt="Issues"></a>
+    <a href="https://github.com/Harsh-Sonker/THM-TUNNEL/stargazers"><img src="https://img.shields.io/github/stars/Harsh-Sonker/THM-TUNNEL" alt="Stars"></a>
+    <a href="https://github.com/Harsh-Sonker/THM-TUNNEL/network/members"><img src="https://img.shields.io/github/forks/Harsh-Sonker/THM-TUNNEL" alt="Forks"></a>
+  </p>
+</div>
 
-If you use TryHackMe regularly, you may have faced this annoying issue: **OpenVPN shows as connected, but the target still doesn't ping or respond.** Sometimes an old OpenVPN process, stale `tun` interface, or leftover VPN state is the reason.
+---
 
-I built **THM-TUNNEL** to make switching between TryHackMe VPN configurations easier. It finds your `.ovpn` files, lets you select the one you want, cleans up the previous OpenVPN session and `tun*` interfaces, and starts a fresh connection.
+## 💡 The Problem
 
-## What it does
+If you use [TryHackMe](https://tryhackme.com) regularly, you may have faced this annoying issue:
+> **OpenVPN shows as connected, but the target still doesn't ping or respond.**
 
-- Finds `.ovpn` files automatically
-- Lets you select the VPN interactively
-- Checks `sudo` access
-- Stops old OpenVPN processes
-- Cleans up old `tun*` interfaces
-- Works with different TryHackMe VPN regions
-- Doesn't hardcode any target IP or subnet
+Sometimes an old OpenVPN process, a stale `tun` interface, or leftover VPN state is the culprit. Manually killing processes and resetting interfaces every time you switch networks is tedious and breaks your flow.
 
-## Usage
+## 🚀 The Solution
 
-```bash
-git clone https://github.com/YOUR_USERNAME/THM-Tunnel.git
-cd THM-Tunnel
-chmod +x thm-tunnel.sh
-./thm-tunnel.sh
+I built **THM-TUNNEL** to make switching between TryHackMe VPN configurations completely frictionless. It automatically finds your `.ovpn` files, lets you select the one you want, forcefully cleans up previous OpenVPN sessions and `tun*` interfaces, and starts a fresh, clean connection.
 
-# THM-TUNNEL
+## ✨ Features
 
-### TryHackMe VPN Configuration Manager
+- 🔍 **Auto-Discovery**: Finds `.ovpn` files automatically—no more hunting for your configs.
+- 🖱️ **Interactive Selection**: Lets you select the desired VPN interactively from a list.
+- 🛡️ **Privilege Check**: Automatically verifies `sudo` access before execution.
+- 🧹 **Process Cleanup**: Identifies and stops old, lingering OpenVPN processes.
+- 🌐 **Interface Reset**: Cleans up old `tun*` network interfaces to prevent conflicts.
+- 🌍 **Region Independent**: Works flawlessly with different TryHackMe VPN regions.
+- 🎯 **Dynamic**: Doesn't hardcode any target IP or subnet—purely dynamic routing.
 
-If you use TryHackMe regularly, you may have faced this annoying issue: **OpenVPN shows as connected, but the target still doesn't ping or respond.** Sometimes an old OpenVPN process, stale `tun` interface, or leftover VPN state is the reason.
+## 🛠️ Installation & Usage
 
-I built **THM-TUNNEL** to make switching between TryHackMe VPN configurations easier. It finds your `.ovpn` files, lets you select the one you want, cleans up the previous OpenVPN session and `tun*` interfaces, and starts a fresh connection.
-
-## What it does
-
-- Finds `.ovpn` files automatically
-- Lets you select the VPN interactively
-- Checks `sudo` access
-- Stops old OpenVPN processes
-- Cleans up old `tun*` interfaces
-- Works with different TryHackMe VPN regions
-- Doesn't hardcode any target IP or subnet
-
-## Usage
+Getting started is easy. Just clone the repository and run the script:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/THM-Tunnel.git
-cd THM-Tunnel
+# 1. Clone the repository
+git clone https://github.com/Harsh-Sonker/THM-TUNNEL.git
+
+# 2. Navigate into the directory
+cd THM-TUNNEL
+
+# 3. Make the script executable
 chmod +x thm-tunnel.sh
-./thm-tunnel.sh
+
+# 4. Run the manager
+sudo ./thm-tunnel.sh
+```
+
+> **Note:** Since the script manages network interfaces and processes, it requires root privileges (`sudo`).
+
+---
+
+<div align="center">
+  Made with ❤️ by <a href="https://github.com/Harsh-Sonker">Harsh Sonker</a>
+</div>

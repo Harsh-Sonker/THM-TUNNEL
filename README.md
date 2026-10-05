@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://tryhackme-images.s3.amazonaws.com/user-avatars/b300f5fc0fa25e60d5b5125dd2806282.png" alt="TryHackMe" width="100"/>
+  <img src="https://dev.to/rscybertech/rscybertech-tryhackme-search-skills-30o" alt="TryHackMe" width="100"/>
   <h1>🛡️ THM-TUNNEL</h1>
   <p><strong>The Ultimate TryHackMe VPN Configuration Manager</strong></p>
 

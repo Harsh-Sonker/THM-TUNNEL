@@ -56,5 +56,5 @@ sudo ./thm-tunnel.sh
 ---
 
 <div align="center">
-  Made with ❤️ by <a href="https://github.com/Harsh-Sonker">Harsh Sonker</a>
+  Made by <a href="https://github.com/Harsh-Sonker">Harsh Sonker</a>
 </div>

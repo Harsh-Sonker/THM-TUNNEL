@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="https://dev.to/rscybertech/rscybertech-tryhackme-search-skills-30o" alt="TryHackMe" width="100"/>
+  <img src="<img width="502" height="512" alt="image" src="https://github.com/user-attachments/assets/c4bb8e2b-fd8e-42e6-832c-8f1beb12cff5" />
+" alt="TryHackMe" width="100"/>
   <h1>🛡️ THM-TUNNEL</h1>
   <p><strong>The Ultimate TryHackMe VPN Configuration Manager</strong></p>
 

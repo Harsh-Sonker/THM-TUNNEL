@@ -1,21 +1,37 @@
 #!/bin/bash
 
+# THM-TUNNEL - TryHackMe VPN Configuration Manager
+# Version: 1.1.0
+
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "[!] Run this script with Bash: bash $0"
+    exit 1
+fi
+
 clear
 
 cat << 'EOF'
-  _______ _   _ __  __ _______                  _     
- |__   __| | | |  \/  |__   __|                | |    
-    | |  | |_| | \  / |  | |_   _ _ __  _ __   | |    
-    | |  |  _  | |\/| |  | | | | | '_ \| '_ \  | |    
-    | |  | | | | |  | |  | | |_| | | | | | | | |_|    
-    |_|  |_| |_|_|  |_|  |_|\__,_|_| |_|_| |_| (_)    
+  _______ _   _ __  __ _______                  _
+ |__   __| | | |  \/  |__   __|                | |
+    | |  | |_| | \  / |  | |_   _ _ __  _ __   | |
+    | |  |  _  | |\/| |  | | | | | '_ \| '_ \  | |
+    | |  | | | | |  | |  | | |_| | | | | | | | |_|
+    |_|  |_| |_|_|  |_|  |_|\__,_|_| |_|_| |_| (_)
 
                  T H M - T U N N E L
           TryHackMe VPN Configuration Manager
-                         v1.0.0
+                         v1.1.0
 EOF
 
 echo
+
+# Check required commands
+for cmd in sudo find ip openvpn awk; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "[!] Required command not found: $cmd"
+        exit 1
+    fi
+done
 
 # Check sudo privileges
 echo "[*] Checking sudo permissions..."
@@ -29,6 +45,7 @@ fi
 
 echo "[+] Sudo access confirmed."
 
+# Find OpenVPN configurations
 echo
 echo "[*] Searching for OpenVPN configurations..."
 echo
@@ -37,8 +54,8 @@ mapfile -t CONFIGS < <(
     find "$HOME" -type f -name "*.ovpn" 2>/dev/null
 )
 
-if [ ${#CONFIGS[@]} -eq 0 ]; then
-    echo "[!] No OpenVPN configuration files found."
+if [ "${#CONFIGS[@]}" -eq 0 ]; then
+    echo "[!] No OpenVPN configuration files found under $HOME."
     exit 1
 fi
 
@@ -52,9 +69,8 @@ done
 echo
 read -rp "[?] Select VPN [1-${#CONFIGS[@]}]: " CHOICE
 
-if ! [[ "$CHOICE" =~ ^[0-9]+$ ]] || \
-   [ "$CHOICE" -lt 1 ] || \
-   [ "$CHOICE" -gt "${#CONFIGS[@]}" ]; then
+if ! [[ "$CHOICE" =~ ^[0-9]+$ ]] ||
+   (( CHOICE < 1 || CHOICE > ${#CONFIGS[@]} )); then
     echo
     echo "[!] Invalid selection."
     exit 1
@@ -66,28 +82,40 @@ echo
 echo "[+] Selected VPN:"
 echo "    $CONFIG"
 
-echo
-echo "[*] Stopping existing OpenVPN processes..."
-sudo pkill -x openvpn 2>/dev/null
+# Track only the OpenVPN process started by this script.
+VPN_PID=""
 
-sleep 2
+cleanup() {
+    if [[ -n "$VPN_PID" ]] && kill -0 "$VPN_PID" 2>/dev/null; then
+        echo
+        echo "[*] Stopping THM-TUNNEL OpenVPN process..."
+        sudo kill -TERM "$VPN_PID" 2>/dev/null || true
+        wait "$VPN_PID" 2>/dev/null || true
+    fi
+}
 
-echo "[*] Cleaning old VPN interfaces..."
-
-while read -r tun; do
-    [ -z "$tun" ] && continue
-
-    echo "[+] Removing $tun"
-    sudo ip link delete "$tun" 2>/dev/null
-
-done < <(
-    ip -o link show |
-    awk -F': ' '$2 ~ /^tun[0-9]+/ {print $2}'
-)
+trap cleanup INT TERM
 
 echo
-echo "[+] Cleanup complete."
 echo "[*] Starting OpenVPN..."
+echo "[*] Press Ctrl+C to disconnect."
 echo
 
-sudo openvpn --disable-dco --config "$CONFIG"
+sudo openvpn --disable-dco --config "$CONFIG" &
+VPN_PID=$!
+
+# Wait for OpenVPN to exit.
+wait "$VPN_PID"
+VPN_STATUS=$?
+VPN_PID=""
+
+echo
+
+if (( VPN_STATUS == 0 )); then
+    echo "[+] OpenVPN exited normally."
+else
+    echo "[!] OpenVPN exited with status $VPN_STATUS."
+    echo "[!] Check the logs above for the cause."
+fi
+
+exit "$VPN_STATUS"
